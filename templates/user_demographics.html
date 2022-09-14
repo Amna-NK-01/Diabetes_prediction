@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %} User Demographics {% endblock %}
+
+{% block login_logout %}
+<a class="nav-link" href="/logout">LOG OUT <span class="sr-only">(current)</span></a>
+{% endblock %}
+
+{% block body %}
+<div class="login-dark demographics-form">
+    <!--loin is must for demographics-form -->
+    <form id="features-form">
+        <h2 class="sr-only">User Demographics Form</h2>
+        <!--creat a User Demographics Form-->
+        <div class="">
+            <h3> Predict Your Diabetes </h3>
+            <p>
+                Enter the required medical details and let the model predict your Diabetes. Make Sure you input
+                valid feature
+                details as per the model training features
+            </p>
+            <p> Example Inputs: [30, 120, 160, 130, 4] </p>
+            <!--provide different details -->
+        </div>
+        <div class="form-group">
+            <!--class="form-group create an HTML form for user input-->
+            <input class="form-control" type="number" name="age" placeholder="Age (21 - 90 Y)" min="21" max="90"
+                   required>
+            <!--type of attribute is number name of attribute is age The placeholder attribute specifies
+                 a short hint that describes the expected value of a input field and min and max
+                 attributes to add restrictions-->
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="number" name="blood_pressure" placeholder="Blood Pressure (0 - 200 mmHg)"
+                   min="0" max="200" required>
+            <!--type of attribute is number name of attribute is blood_pressure The placeholder attribute specifies
+                 a short hint that describes the expected value of a input field and min and max
+                 attributes add restrictions-->
+        </div>
+        <div class="form-group">
+
+            <input class="form-control" type="number" name="BMI" placeholder="Body Mass Index (0 - 100 kg/m2)"
+                   min="0" max="100" required>
+        </div>
+        <!--type of attribute is number name of attribute is cholestrol The placeholder attribute specifies
+                    a short hint that describes the expected value of a input field and min and max
+                    attributes add restrictions-->
+        <div class="form-group">
+            <input class="form-control" type="number" name="Glucose" placeholder="Glucose (0 - 210 mg/dL)" min="0"
+                   max="210" required>
+        </div>
+        <!--type of attribute is number name of attribute is max_hr The placeholder attribute specifies
+                     a short hint that describes the expected value of a input field and min and max
+                     attributes add restrictions-->
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit">Make Prediction</button>
+        </div>
+        <!--btn-block to create a block level button that spans the entire width of the parent element.-->
+    </form>
+</div>
+<!-- SUCCESS MODAL AFTER PREDICTION IS COMPLETED -->
+<!-- Modal -->
+<div class="modal" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title"> </h5>
+            </div>
+            <div id="modal-body" class="modal-body"> </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="javascript:window.location.href='/';">Go To Home</button>
+                <button type="button" class="btn btn-primary" onclick="javascript:window.location.href='/user_demographics';">
+                    Predict Again
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL CODE -->
+<script>
+
+    $(document).ready(() => {
+        $('#features-form').submit(() => {
+            event.preventDefault();
+    const values = [
+        [
+            parseInt($('input[name="age"]').val()),
+            parseInt($('input[name="blood_pressure"]').val()),
+            parseInt($('input[name="BMI"]').val()),
+            parseInt($('input[name="Glucose"]').val()),
+
+        ]
+    ]
+
+    console.log(JSON.stringify({ 'values': values }))
+    $.ajax({
+        url: '/user_demographics',
+        type: 'POST',
+        data: JSON.stringify({ 'values': values }),   // converts js value to JSON string
+        contentType: 'application/json;charset=UTF-8',
+    }).done(function (response) {     // on success get the return object from server
+        if (response.status == 200) {
+            console.log(response)
+            // console.log("Trained the model");
+            $('#modal-title').append(`${response.message}`);
+        $('#modal-body').append(`<p> ${response.body} </p>`);
+    $('#modal').modal({ backdrop: 'static', keyboard: false });
+    }
+    });
+    });
+    });
+
+</script>
+{% endblock %}

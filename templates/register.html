@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} User Registration {% endblock %}
+
+<!-- LOGIN PAGE CONTENT GOES HERE -->
+{% block body %}
+<div class="login-dark">
+    <form method="post">
+        <!--Submit a form using the "post" method. Sends the form-data as an HTTP post transaction-->
+        <h2 class="sr-only">Login Form</h2>
+        <!--the sr-only class is used to hide information that is intended only for screen readers from the layout of a rendered page-->
+        <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
+        <div class="form-group">
+            <!--create an HTML form for user input-->
+            <input class="form-control" type="text" name="name" placeholder="Full Name" required>
+        </div>
+        <!--class="form-control is used to collect User data as free text-->
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Get Started</button></div>
+        <!--btn-block to create a block level button that spans the entire width of the parent element-->
+        <a href="/login" class="forgot">Already have an account? Login here</a>
+    </form>
+</div>
+{% endblock %}
